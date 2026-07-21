@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /partials/
+Disallow: /assets/css/
+
+Sitemap: https://lepeignevert.com/sitemap.xml

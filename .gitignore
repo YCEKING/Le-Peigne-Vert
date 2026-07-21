@@ -1,0 +1,19 @@
+# Logs & données runtime (ne pas versionner)
+data/*.log
+*.log
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Dépendances / build (au cas où)
+node_modules/
+vendor/
+dist/
+.env
