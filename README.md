@@ -65,7 +65,7 @@ cd public_html
 php -S 127.0.0.1:8100
 ```
 
-Puis ouvrir **http://127.0.0.1:8100**.
+Puis ouvrir **[http://127.0.0.1:8100](http://127.0.0.1:8100)**.
 
 ## 📦 Déploiement (Hostinger)
 
