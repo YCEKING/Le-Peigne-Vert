@@ -89,34 +89,78 @@
       q.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
         var v=parseInt(inp.value)||1;v+=(this.dataset.d==='+'?1:-1);if(v<1)v=1;inp.value=v;});});
     });
-    // Panier : compteur + bouton flottant (mobile) + retour visuel
+    // Panier (drawer) : gestion d'articles + bouton flottant
     (function(){
+      var KEY='lpv_cart_items';
       var fab=document.getElementById('cartFab');
       var fabCount=fab?fab.querySelector('.cart-fab-count'):null;
       var dots=document.querySelectorAll('.cart .dot');
-      function get(){try{return parseInt(localStorage.getItem('lpv_cart')||'0',10)||0;}catch(e){return 0;}}
-      function save(n){try{localStorage.setItem('lpv_cart',n);}catch(e){}}
-      function render(){
-        var n=get();
+      var drawer=document.getElementById('cartDrawer');
+      var overlay=document.getElementById('cartOverlay');
+      var itemsEl=document.getElementById('cartItems');
+      var totalEl=document.getElementById('cartTotal');
+      var headCount=document.getElementById('cartHeadCount');
+      var foot=document.getElementById('cartFoot');
+      function read(){try{return JSON.parse(localStorage.getItem(KEY))||[];}catch(e){return [];}}
+      function write(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
+      function count(a){return a.reduce(function(s,i){return s+i.qty;},0);}
+      function total(a){return a.reduce(function(s,i){return s+i.price*i.qty;},0);}
+      function euro(n){return n.toFixed(2).replace('.',',')+' €';}
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function badges(){
+        var n=count(read());
         dots.forEach(function(d){d.textContent=n;d.style.display=n>0?'':'none';});
-        if(fabCount){fabCount.textContent=n;}
-        if(fab){fab.classList.toggle('show',n>0);}
+        if(fabCount)fabCount.textContent=n;
+        if(fab)fab.classList.toggle('show',n>0);
+        if(headCount)headCount.textContent=n>0?' · '+n+' article'+(n>1?'s':''):'';
       }
-      function toast(msg){
-        var t=document.createElement('div');t.className='cart-toast';t.textContent=msg;
-        document.body.appendChild(t);
-        requestAnimationFrame(function(){t.classList.add('show');});
-        setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},1700);
+      function renderDrawer(){
+        if(!itemsEl)return;
+        var a=read();
+        if(!a.length){
+          itemsEl.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 7h13l-1.2 9.2a2 2 0 0 1-2 1.8H8.9a2 2 0 0 1-2-1.7L5.5 5.5A1 1 0 0 0 4.5 5H3" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Votre panier est vide</b><span>Découvrez nos routines et soins végétaux.</span><a class="btn btn-primary" href="boutique.php">Voir la boutique</a></div>';
+          if(foot)foot.classList.add('hide');return;
+        }
+        if(foot)foot.classList.remove('hide');
+        itemsEl.innerHTML=a.map(function(i){
+          return '<div class="cart-item" data-id="'+esc(i.id)+'">'+(i.img?'<img src="'+esc(i.img)+'" alt="">':'')+
+            '<div class="ci-body"><div class="ci-top"><span class="ci-name">'+esc(i.name)+'</span>'+
+            '<button class="ci-rm" data-rm aria-label="Retirer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M9 7V5h6v2M7 7l1 12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-12"/></svg></button></div>'+
+            '<div class="ci-bottom"><span class="ci-qty"><button data-d="-" aria-label="Moins">−</button><span>'+i.qty+'</span><button data-d="+" aria-label="Plus">+</button></span>'+
+            '<span class="ci-line">'+euro(i.price*i.qty)+'</span></div></div></div>';
+        }).join('');
+        if(totalEl)totalEl.textContent=euro(total(a));
       }
-      function add(){
-        save(get()+1);render();
+      function refresh(){badges();renderDrawer();}
+      function openD(){if(!drawer)return;drawer.classList.add('show');overlay.classList.add('show');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+      function closeD(){if(!drawer)return;drawer.classList.remove('show');overlay.classList.remove('show');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+      function toast(msg){var t=document.createElement('div');t.className='cart-toast';t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('show');});setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},1600);}
+      function addItem(p){
+        var a=read();var ex=a.filter(function(i){return i.id===p.id;})[0];
+        if(ex)ex.qty++;else a.push({id:p.id,name:p.name,price:p.price,img:p.img,qty:1});
+        write(a);refresh();
         if(fab){fab.classList.remove('bump');void fab.offsetWidth;fab.classList.add('bump');}
-        toast('Ajouté au panier ✓');
+        openD();
       }
-      document.querySelectorAll('.add, .pdp-cta .btn-primary').forEach(function(b){
-        b.addEventListener('click',function(e){e.preventDefault();add();});
+      function setQty(id,d){var a=read();a.forEach(function(i){if(i.id===id)i.qty+=d;});write(a.filter(function(i){return i.qty>0;}));refresh();}
+      function removeItem(id){write(read().filter(function(i){return i.id!==id;}));refresh();}
+      document.querySelectorAll('[data-add]').forEach(function(b){
+        b.addEventListener('click',function(e){e.preventDefault();
+          addItem({id:b.dataset.id||b.dataset.name,name:b.dataset.name||'Produit',price:parseFloat(b.dataset.price)||0,img:b.dataset.img||''});
+        });
       });
-      render();
+      document.querySelectorAll('.cart, #cartFab').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();openD();});});
+      var cc=document.getElementById('cartClose');if(cc)cc.addEventListener('click',closeD);
+      if(overlay)overlay.addEventListener('click',closeD);
+      var cont=document.getElementById('cartContinue');if(cont)cont.addEventListener('click',closeD);
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')closeD();});
+      if(itemsEl)itemsEl.addEventListener('click',function(e){
+        var row=e.target.closest('.cart-item');if(!row)return;var id=row.dataset.id;
+        if(e.target.closest('[data-rm]'))removeItem(id);
+        else{var q=e.target.closest('[data-d]');if(q)setQty(id,q.dataset.d==='+'?1:-1);}
+      });
+      var chk=document.getElementById('cartCheckout');if(chk)chk.addEventListener('click',function(){toast('Paiement en ligne bientôt disponible');});
+      refresh();
     })();
 
     // Filtres repliables (boutique, mobile)

@@ -126,13 +126,13 @@ include 'partials/header.php';
     </div>
     <div class="prod-grid">
       <article class="prod rv"><div class="ph"><span class="tag">Best-seller</span><img src="assets/img/coffret-1.webp" alt="Routine Douceur" loading="lazy"></div>
-        <div class="body"><div class="cat">Coffret · Routine</div><h3>Routine Douceur</h3><div class="buy"><span class="price">48,00 €</span><button class="add">Ajouter</button></div></div></article>
+        <div class="body"><div class="cat">Coffret · Routine</div><h3>Routine Douceur</h3><div class="buy"><span class="price">48,00 €</span><button class="add" data-add data-name="Routine Douceur" data-price="48.00" data-img="assets/img/coffret-1.webp">Ajouter</button></div></div></article>
       <article class="prod rv"><div class="ph"><img src="assets/img/coffret-2.webp" alt="Routine Curly" loading="lazy"></div>
-        <div class="body"><div class="cat">Coffret · Boucles</div><h3>Routine Curly · Citron</h3><div class="buy"><span class="price">52,00 €</span><button class="add">Ajouter</button></div></div></article>
+        <div class="body"><div class="cat">Coffret · Boucles</div><h3>Routine Curly · Citron</h3><div class="buy"><span class="price">52,00 €</span><button class="add" data-add data-name="Routine Curly · Citron" data-price="52.00" data-img="assets/img/coffret-2.webp">Ajouter</button></div></div></article>
       <article class="prod rv"><div class="ph"><img src="assets/img/life-3.jpg" alt="Routine Volume" loading="lazy"></div>
-        <div class="body"><div class="cat">Coffret · Volume</div><h3>Routine Volume</h3><div class="buy"><span class="price">52,00 €</span><button class="add">Ajouter</button></div></div></article>
+        <div class="body"><div class="cat">Coffret · Volume</div><h3>Routine Volume</h3><div class="buy"><span class="price">52,00 €</span><button class="add" data-add data-name="Routine Volume" data-price="52.00" data-img="assets/img/life-3.jpg">Ajouter</button></div></div></article>
       <article class="prod rv"><div class="ph"><span class="tag">Nouveauté</span><img src="assets/img/citronnier.jpg" alt="Après-shampoing liquide" loading="lazy"></div>
-        <div class="body"><div class="cat">Soin · Liquide</div><h3>Après-shampoing liquide</h3><div class="buy"><span class="price">16,00 €</span><button class="add">Ajouter</button></div></div></article>
+        <div class="body"><div class="cat">Soin · Liquide</div><h3>Après-shampoing liquide</h3><div class="buy"><span class="price">16,00 €</span><button class="add" data-add data-name="Après-shampoing liquide" data-price="16.00" data-img="assets/img/citronnier.jpg">Ajouter</button></div></div></article>
     </div>
   </div>
 </section>

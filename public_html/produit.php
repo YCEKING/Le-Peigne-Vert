@@ -69,7 +69,7 @@ include 'partials/header.php';
 
     <div class="pdp-cta">
       <div class="qty"><button type="button" data-d="-" aria-label="Moins">−</button><input value="1" inputmode="numeric" aria-label="Quantité"><button type="button" data-d="+" aria-label="Plus">+</button></div>
-      <button class="btn btn-primary">Ajouter au panier · 48 €</button>
+      <button class="btn btn-primary" data-add data-name="Routine Douceur" data-price="48.00" data-img="assets/img/coffret-1.webp">Ajouter au panier · 48 €</button>
       <button class="icon-btn" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" stroke-linejoin="round"/></svg></button>
     </div>
 
@@ -95,7 +95,7 @@ include 'partials/header.php';
       <article class="prod rv">
         <a href="produit.php" class="ph"><img src="assets/img/<?= $pr['img'] ?>" alt="<?= htmlspecialchars($pr['n']) ?>" loading="lazy"></a>
         <div class="body"><div class="cat"><?= $pr['c'] ?></div><h3><a href="produit.php"><?= $pr['n'] ?></a></h3>
-          <div class="buy"><span class="price"><?= $pr['p'] ?> €</span><button class="add">Ajouter</button></div></div>
+          <div class="buy"><span class="price"><?= $pr['p'] ?> €</span><button class="add" data-add data-name="<?= htmlspecialchars($pr['n']) ?>" data-price="<?= str_replace(',','.',$pr['p']) ?>" data-img="assets/img/<?= $pr['img'] ?>">Ajouter</button></div></div>
       </article>
       <?php endforeach; ?>
     </div>

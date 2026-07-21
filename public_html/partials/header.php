@@ -115,3 +115,19 @@ $collections = [
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 7h13l-1.2 9.2a2 2 0 0 1-2 1.8H8.9a2 2 0 0 1-2-1.7L5.5 5.5A1 1 0 0 0 4.5 5H3" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <span class="cart-fab-count">0</span>
 </a>
+
+<!-- Panier coulissant -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Votre panier">
+  <div class="cart-drawer-head">
+    <span>Votre panier<span class="n" id="cartHeadCount"></span></span>
+    <button class="drawer-close" id="cartClose" aria-label="Fermer le panier">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot" id="cartFoot">
+    <div class="cart-subtotal"><span>Sous-total</span><b id="cartTotal">0,00 €</b></div>
+    <p class="cart-note">Livraison et code promo calculés à l'étape suivante.</p>
+    <button class="btn btn-primary" id="cartCheckout">Passer commande</button>
+    <button class="btn btn-ghost" id="cartContinue">Continuer mes achats</button>
+  </div>
+</aside>
